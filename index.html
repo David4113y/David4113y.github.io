@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoVault Tools — Your Crypto Intelligence Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* === RESET & BASE === */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0f1a;--bg2:#111827;--bg3:#1e293b;--bg4:#1a2235;
+  --blue:#3b82f6;--green:#10b981;--red:#ef4444;--purple:#8b5cf6;
+  --yellow:#f59e0b;--cyan:#06b6d4;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#1e293b;--border2:#2d3a4f;
+  --glow-blue:0 0 20px rgba(59,130,246,.25);
+  --glow-green:0 0 20px rgba(16,185,129,.25);
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-heading:'Sora',sans-serif;
+  --font-mono:'Space Mono',monospace;
+  --max-w:1280px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;min-height:100vh}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+img{max-width:100%}
+h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
+.mono{font-family:var(--font-mono)}
+
+/* === LAYOUT === */
+.container{max-width:var(--max-w);margin:0 auto;padding:0 20px}
+.section{display:none;animation:fadeIn .35s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* === HEADER === */
+.header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;max-width:var(--max-w);margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-heading);font-weight:800;font-size:1.3rem;color:#fff;cursor:pointer}
+.logo svg{width:32px;height:32px}
+.logo span.accent{color:var(--blue)}
+.nav{display:flex;gap:4px}
+.nav-btn{background:none;border:none;color:var(--text2);font-family:var(--font-body);font-size:.9rem;font-weight:500;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
+.nav-btn:hover{color:#fff;background:var(--bg3)}
+.nav-btn.active{color:#fff;background:var(--blue);box-shadow:var(--glow-blue)}
+.cta-header{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;padding:10px 22px;border-radius:8px;font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s;font-family:var(--font-body)}
+.cta-header:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(59,130,246,.4)}
+
+/* === TICKER === */
+.ticker-bar{background:var(--bg2);border-bottom:1px solid var(--border);overflow:hidden;white-space:nowrap;padding:10px 0}
+.ticker-track{display:flex;gap:36px;animation:scroll 30s linear infinite;padding:0 20px}
+.ticker-item{display:flex;align-items:center;gap:8px;font-size:.85rem;flex-shrink:0}
+.ticker-item .symbol{font-weight:700;color:#fff;font-family:var(--font-mono)}
+.ticker-item .price{font-family:var(--font-mono);color:var(--text)}
+.ticker-item .change{font-family:var(--font-mono);font-weight:600;font-size:.8rem}
+.change.up{color:var(--green)}.change.down{color:var(--red)}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* === CARDS, TABLES === */
+.card{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:24px;transition:all .25s}
+.card:hover{border-color:var(--blue);box-shadow:var(--glow-blue)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin:24px 0}
+.stat-card{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:22px;position:relative;overflow:hidden}
+.stat-card .label{font-size:.8rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.stat-card .value{font-family:var(--font-mono);font-size:1.6rem;font-weight:700;color:#fff}
+.stat-card .sub{font-size:.8rem;color:var(--text2);margin-top:4px;font-family:var(--font-mono)}
+.stat-card::after{content:'';position:absolute;top:0;right:0;width:80px;height:80px;border-radius:50%;filter:blur(40px);opacity:.15}
+.stat-card.blue::after{background:var(--blue)}
+.stat-card.green::after{background:var(--green)}
+.stat-card.purple::after{background:var(--purple)}
+.stat-card.yellow::after{background:var(--yellow)}
+
+.data-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.data-table th{text-align:left;padding:12px 16px;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border2);font-weight:600}
+.data-table td{padding:14px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
+.data-table tr:hover{background:var(--bg3)}
+.data-table .mono{font-family:var(--font-mono);font-size:.88rem}
+
+/* === BUTTONS === */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:8px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:all .2s;font-family:var(--font-body);text-decoration:none}
+.btn:hover{transform:translateY(-1px);text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--blue),#2563eb);color:#fff;box-shadow:0 2px 12px rgba(59,130,246,.3)}
+.btn-primary:hover{box-shadow:0 4px 24px rgba(59,130,246,.45)}
+.btn-green{background:linear-gradient(135deg,var(--green),#059669);color:#fff;box-shadow:0 2px 12px rgba(16,185,129,.3)}
+.btn-green:hover{box-shadow:0 4px 24px rgba(16,185,129,.45)}
+.btn-affiliate{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;box-shadow:0 2px 16px rgba(139,92,246,.3)}
+.btn-affiliate:hover{box-shadow:0 4px 24px rgba(139,92,246,.5)}
+.btn-sm{padding:7px 16px;font-size:.82rem;border-radius:6px}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue)}
+
+/* === HERO === */
+.hero{text-align:center;padding:60px 20px 40px}
+.hero h1{font-size:2.8rem;color:#fff;margin-bottom:14px}
+.hero h1 .accent{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.1rem;color:var(--text2);max-width:600px;margin:0 auto 30px}
+.hero-badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-badge{background:var(--bg3);border:1px solid var(--border2);padding:6px 14px;border-radius:20px;font-size:.8rem;color:var(--text2)}
+
+/* === CTA BANNER === */
+.cta-banner{background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1px solid var(--border2);border-radius:16px;padding:32px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;margin:30px 0;flex-wrap:wrap}
+.cta-banner h3{font-size:1.3rem;color:#fff;margin-bottom:4px}
+.cta-banner p{color:var(--text2);font-size:.9rem}
+.cta-banner .partner{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+
+/* === AD PLACEHOLDER === */
+.ad-slot{border:2px dashed var(--border2);border-radius:12px;padding:28px;text-align:center;color:var(--text3);font-size:.8rem;margin:24px 0;background:var(--bg2)}
+.ad-slot span{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+
+/* === FORM ELEMENTS === */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:20px 0}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:.8rem;color:var(--text2);font-weight:500}
+.form-group input,.form-group select{background:var(--bg);border:1px solid var(--border2);color:#fff;padding:12px 14px;border-radius:8px;font-size:.95rem;font-family:var(--font-mono);outline:none;transition:border .2s}
+.form-group input:focus,.form-group select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.form-group select{cursor:pointer}
+.form-group select option{background:var(--bg2)}
+
+/* === RESULTS === */
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:24px 0}
+.result-card{background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:18px;text-align:center}
+.result-card .rlabel{font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.result-card .rvalue{font-family:var(--font-mono);font-size:1.3rem;font-weight:700}
+.result-card .rvalue.profit{color:var(--green)}
+.result-card .rvalue.loss{color:var(--red)}
+
+/* === HARDWARE CARDS === */
+.hw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin:24px 0}
+.hw-card{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.hw-card h4{color:#fff;font-size:1rem}
+.hw-card .specs{font-size:.82rem;color:var(--text2);line-height:1.7}
+.hw-card .specs strong{color:var(--text)}
+.hw-card .hw-price{font-family:var(--font-mono);font-size:1.2rem;color:var(--green);font-weight:700}
+
+/* === EXCHANGE TABLE === */
+.exchange-row.editors-pick{background:rgba(59,130,246,.06);border-left:3px solid var(--blue)}
+.exchange-row.editors-pick td:first-child::before{content:"Editor's Pick";display:block;font-size:.65rem;color:var(--blue);text-transform:uppercase;font-weight:700;letter-spacing:.06em;margin-bottom:2px}
+.stars{color:var(--yellow);font-size:.9rem;letter-spacing:2px}
+.check{color:var(--green);font-weight:700}.cross{color:var(--text3)}
+.bonus-badge{background:rgba(16,185,129,.12);color:var(--green);padding:4px 10px;border-radius:6px;font-size:.78rem;font-weight:600;white-space:nowrap}
+
+/* === LEARN CARDS === */
+.learn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin:24px 0}
+.learn-card{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:28px;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:14px}
+.learn-card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:var(--glow-blue)}
+.learn-card .lc-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.learn-card h4{color:#fff;font-size:1rem;line-height:1.4}
+.learn-card .lc-meta{display:flex;gap:10px;align-items:center;font-size:.78rem;color:var(--text3)}
+.badge{padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.badge.beginner{background:rgba(16,185,129,.12);color:var(--green)}
+.badge.intermediate{background:rgba(59,130,246,.12);color:var(--blue)}
+.badge.advanced{background:rgba(239,68,68,.12);color:var(--red)}
+
+/* === FOOTER === */
+.footer{background:var(--bg2);border-top:1px solid var(--border);margin-top:60px;padding:48px 20px 24px}
+.footer-inner{max-width:var(--max-w);margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:40px;margin-bottom:36px}
+.footer h5{color:#fff;margin-bottom:14px;font-size:.95rem}
+.footer p,.footer a{font-size:.85rem;color:var(--text2);line-height:1.8}
+.footer a:hover{color:var(--blue)}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:6px}
+.footer-links a{color:var(--text2);font-size:.85rem}
+.newsletter-form{display:flex;gap:8px;margin-top:10px}
+.newsletter-form input{flex:1;background:var(--bg);border:1px solid var(--border2);padding:10px 14px;border-radius:8px;color:#fff;font-size:.88rem;outline:none}
+.newsletter-form input:focus{border-color:var(--blue)}
+.newsletter-form button{background:var(--blue);color:#fff;border:none;padding:10px 18px;border-radius:8px;font-weight:600;cursor:pointer;font-size:.85rem;white-space:nowrap}
+.footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-bottom p{font-size:.78rem;color:var(--text3)}
+.disclosure{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:14px 18px;font-size:.78rem;color:var(--text3);line-height:1.6;margin-top:20px}
+
+/* === SECTION HEADERS === */
+.section-header{margin-bottom:28px}
+.section-header h2{font-size:1.8rem;color:#fff;margin-bottom:6px}
+.section-header p{color:var(--text2);font-size:.95rem}
+
+/* === RESPONSIVE === */
+@media(max-width:900px){
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:2rem}
+  .cta-banner{flex-direction:column;text-align:center}
+}
+@media(max-width:640px){
+  .nav{display:none;position:absolute;top:60px;left:0;right:0;background:var(--bg2);flex-direction:column;padding:12px;border-bottom:1px solid var(--border)}
+  .nav.open{display:flex}
+  .menu-toggle{display:block !important}
+  .footer-grid{grid-template-columns:1fr}
+  .hero h1{font-size:1.6rem}
+  .stat-card .value{font-size:1.2rem}
+  .data-table{font-size:.8rem}
+  .data-table th,.data-table td{padding:10px 8px}
+}
+.menu-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+.table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border2)}
+
+/* === MINING SIDEBAR LAYOUT === */
+.mining-layout{display:grid;grid-template-columns:1fr 280px;gap:24px}
+@media(max-width:900px){.mining-layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo" onclick="switchTab('dashboard')">
+      <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#3b82f6"/><path d="M10 22V14l6-4 6 4v8l-6 4-6-4z" stroke="#fff" stroke-width="2" fill="none"/><circle cx="16" cy="16" r="3" fill="#fff"/></svg>
+      <span>Crypto<span class="accent">Vault</span> Tools</span>
+    </div>
+    <button class="menu-toggle" onclick="document.querySelector('.nav').classList.toggle('open')">&#9776;</button>
+    <nav class="nav">
+      <button class="nav-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">Dashboard</button>
+      <button class="nav-btn" data-tab="mining" onclick="switchTab('mining')">Mining Calculator</button>
+      <button class="nav-btn" data-tab="exchanges" onclick="switchTab('exchanges')">Exchanges</button>
+      <button class="nav-btn" data-tab="learn" onclick="switchTab('learn')">Learn</button>
+    </nav>
+    <a href="#affiliate" target="_blank" class="cta-header">Get Started Free</a>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker-track"></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+  <!-- DASHBOARD -->
+  <section id="sec-dashboard" class="section active">
+    <div class="container">
+      <div class="hero">
+        <h1>Your Crypto <span class="accent">Intelligence Hub</span></h1>
+        <p>Free professional-grade tools, real-time data, and expert insights to help you navigate the crypto markets with confidence.</p>
+        <div class="hero-badges">
+          <span class="hero-badge">&#9889; Real-Time Prices</span>
+          <span class="hero-badge">&#9874; Mining Calculator</span>
+          <span class="hero-badge">&#128202; Exchange Reviews</span>
+          <span class="hero-badge">&#128218; Free Education</span>
+        </div>
+      </div>
+
+      <div class="ad-slot" id="ad-top">
+        <!-- ADSENSE STEP: Replace this entire div's content with your Google AdSense code -->
+        <!-- 1. Go to adsense.google.com and sign up -->
+        <!-- 2. Once approved, create a new ad unit (Display Ad, 728x90 Leaderboard) -->
+        <!-- 3. Copy the code and paste it here, replacing this comment -->
+        728 x 90 &mdash; Advertisement<span>Your Google AdSense code goes here</span>
+      </div>
+
+      <div class="section-header"><h2>Market Overview</h2><p>Key metrics at a glance &bull; <span class="mono" style="color:var(--text3);font-size:.8rem">Prices update every 60s</span></p></div>
+      <div class="stat-grid" id="market-stats">
+        <div class="stat-card blue"><div class="label">Total Market Cap</div><div class="value mono" id="s-mcap">$3.42T</div><div class="sub change up">+2.4% (24h)</div></div>
+        <div class="stat-card green"><div class="label">BTC Dominance</div><div class="value mono" id="s-btcdom">54.8%</div><div class="sub">Trending up</div></div>
+        <div class="stat-card purple"><div class="label">Fear &amp; Greed Index</div><div class="value mono" id="s-fng">72 &mdash; Greed</div><div class="sub" style="color:var(--green)">Bullish sentiment</div></div>
+        <div class="stat-card yellow"><div class="label">24h Volume</div><div class="value mono" id="s-vol">$128.5B</div><div class="sub change up">+5.1%</div></div>
+      </div>
+
+      <div class="section-header" style="margin-top:36px"><h2>Top 10 Cryptocurrencies</h2><p>Ranked by market capitalization</p></div>
+      <div class="table-wrap">
+        <table class="data-table" id="top10-table">
+          <thead><tr><th>#</th><th>Name</th><th>Price</th><th>24h %</th><th>7d %</th><th>Market Cap</th></tr></thead>
+          <tbody id="top10-body"></tbody>
+        </table>
+      </div>
+
+      <div class="cta-banner" style="margin-top:36px">
+        <div>
+          <div class="partner">Sponsored Partner</div>
+          <h3>Start Trading on Coinbase</h3>
+          <p>Join 110M+ verified users. Get up to $200 in crypto when you sign up and trade.</p>
+        </div>
+        <a href="#affiliate" target="_blank" class="btn btn-affiliate">Sign Up &amp; Earn Bonus &rarr;</a>
+      </div>
+    </div>
+  </section>
+  <!-- MINING CALCULATOR -->
+  <section id="sec-mining" class="section">
+    <div class="container">
+      <div class="section-header" style="margin-top:36px"><h2>Mining Profitability Calculator</h2><p>Estimate your mining revenue and find your break-even point</p></div>
+      <div class="mining-layout">
+        <div>
+          <div class="card">
+            <div class="form-grid">
+              <div class="form-group"><label>Cryptocurrency</label><select id="m-coin"><option value="BTC">Bitcoin (BTC)</option><option value="ETC">Ethereum Classic (ETC)</option><option value="LTC">Litecoin (LTC)</option><option value="DOGE">Dogecoin (DOGE)</option><option value="KAS">Kaspa (KAS)</option></select></div>
+              <div class="form-group"><label>Hash Rate</label><input type="number" id="m-hashrate" placeholder="e.g. 140" value="140"><div style="font-size:.72rem;color:var(--text3);margin-top:2px" id="m-hashunit">TH/s</div></div>
+              <div class="form-group"><label>Power Consumption (W)</label><input type="number" id="m-power" placeholder="e.g. 3010" value="3010"></div>
+              <div class="form-group"><label>Electricity Cost ($/kWh)</label><input type="number" id="m-elec" placeholder="e.g. 0.10" value="0.10" step="0.01"></div>
+              <div class="form-group"><label>Pool Fee (%)</label><input type="number" id="m-pool" placeholder="e.g. 1" value="1" step="0.1"></div>
+              <div class="form-group"><label>Hardware Cost ($)</label><input type="number" id="m-hwcost" placeholder="e.g. 5000" value="5000"></div>
+            </div>
+            <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="calculateMining()">Calculate Profitability</button>
+              <button class="btn btn-outline" onclick="resetMining()">Reset</button>
+            </div>
+          </div>
+
+          <div id="mining-results" style="display:none;margin-top:24px">
+            <h3 style="color:#fff;margin-bottom:16px;font-family:var(--font-heading)">Estimated Results</h3>
+            <div class="results-grid" id="results-grid"></div>
+            <p style="font-size:.78rem;color:var(--text3);margin-top:12px">* Prices and difficulty are estimates for 2026. Actual results will vary based on network conditions, price fluctuations, and other factors.</p>
+          </div>
+
+          <div style="margin-top:36px">
+            <div class="section-header"><h2>Recommended Mining Hardware</h2><p>Top ASIC miners for 2026 &bull; <span style="font-size:.75rem;color:var(--text3)">Affiliate links</span></p></div>
+            <div class="hw-grid">
+              <div class="hw-card"><h4>Bitmain Antminer S21 XP</h4><div class="specs"><strong>Algorithm:</strong> SHA-256 (BTC)<br><strong>Hash Rate:</strong> 270 TH/s<br><strong>Power:</strong> 3,645W<br><strong>Efficiency:</strong> 13.5 J/TH</div><div class="hw-price">$8,499</div><a href="#affiliate" target="_blank" class="btn btn-affiliate btn-sm">Buy on Amazon &rarr;</a></div>
+              <div class="hw-card"><h4>MicroBT Whatsminer M60S</h4><div class="specs"><strong>Algorithm:</strong> SHA-256 (BTC)<br><strong>Hash Rate:</strong> 186 TH/s<br><strong>Power:</strong> 3,348W<br><strong>Efficiency:</strong> 18 J/TH</div><div class="hw-price">$5,199</div><a href="#affiliate" target="_blank" class="btn btn-affiliate btn-sm">Buy on Amazon &rarr;</a></div>
+              <div class="hw-card"><h4>Bitmain Antminer L9</h4><div class="specs"><strong>Algorithm:</strong> Scrypt (LTC/DOGE)<br><strong>Hash Rate:</strong> 16 GH/s<br><strong>Power:</strong> 3,360W<br><strong>Efficiency:</strong> 210 J/GH</div><div class="hw-price">$12,999</div><a href="#affiliate" target="_blank" class="btn btn-affiliate btn-sm">Buy on Amazon &rarr;</a></div>
+              <div class="hw-card"><h4>IceRiver KS5 Pro</h4><div class="specs"><strong>Algorithm:</strong> kHeavyHash (KAS)<br><strong>Hash Rate:</strong> 15 TH/s<br><strong>Power:</strong> 3,000W<br><strong>Efficiency:</strong> 200 J/TH</div><div class="hw-price">$9,899</div><a href="#affiliate" target="_blank" class="btn btn-affiliate btn-sm">Buy on Amazon &rarr;</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="ad-slot" style="position:sticky;top:80px" id="ad-sidebar">
+            <!-- ADSENSE STEP: Paste a 300x600 Large Skyscraper ad unit code here -->
+            300 x 600<br>Advertisement<span>Your Google AdSense code goes here</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- EXCHANGES -->
+  <section id="sec-exchanges" class="section">
+    <div class="container">
+      <div class="section-header" style="margin-top:36px"><h2>Exchange Comparison</h2><p>Find the best crypto exchange for your needs &bull; Updated for 2026</p></div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Exchange</th><th>Trading Fees</th><th>Deposit Methods</th><th>Coins Listed</th><th>Security</th><th>Best For</th><th>Sign Up Bonus</th><th></th></tr></thead>
+          <tbody>
+            <tr class="exchange-row editors-pick"><td><strong style="color:#fff">Coinbase</strong></td><td class="mono">0.00%–0.60%</td><td>Bank, Card, PayPal, Apple Pay</td><td class="mono">260+</td><td class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</td><td>Beginners</td><td><span class="bonus-badge">Up to $200</span></td><td><a href="#affiliate" target="_blank" class="btn btn-affiliate btn-sm">Sign Up</a></td></tr>
+            <tr class="exchange-row"><td><strong style="color:#fff">Binance</strong></td><td class="mono">0.01%–0.10%</td><td>Bank, Card, P2P, Crypto</td><td class="mono">400+</td><td class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</td><td>Low fees</td><td><span class="bonus-badge">Up to $100</span></td><td><a href="#affiliate" target="_blank" class="btn btn-affiliate btn-sm">Sign Up</a></td></tr>
+            <tr class="exchange-row"><td><strong style="color:#fff">Kraken</strong></td><td class="mono">0.00%–0.26%</td><td>Bank, Card, Crypto</td><td class="mono">230+</td><td class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</td><td>Security</td><td><span class="bonus-badge">Up to $150</span></td><td><a href="#affiliate" target="_blank" class="btn btn-affiliate btn-sm">Sign Up</a></td></tr>
+            <tr class="exchange-row"><td><strong style="color:#fff">Gemini</strong></td><td class="mono">0.00%–0.40%</td><td>Bank, Card, Crypto</td><td class="mono">130+</td><td class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</td><td>Compliance</td><td><span class="bonus-badge">$25 in BTC</span></td><td><a href="#affiliate" target="_blank" class="btn btn-affiliate btn-sm">Sign Up</a></td></tr>
+            <tr class="exchange-row"><td><strong style="color:#fff">Crypto.com</strong></td><td class="mono">0.00%–0.075%</td><td>Bank, Card, Crypto, Apple Pay</td><td class="mono">350+</td><td class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</td><td>Rewards</td><td><span class="bonus-badge">$25 CRO</span></td><td><a href="#affiliate" target="_blank" class="btn btn-affiliate btn-sm">Sign Up</a></td></tr>
+            <tr class="exchange-row"><td><strong style="color:#fff">KuCoin</strong></td><td class="mono">0.01%–0.10%</td><td>Card, P2P, Crypto</td><td class="mono">800+</td><td class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</td><td>Altcoins</td><td><span class="bonus-badge">Up to $500</span></td><td><a href="#affiliate" target="_blank" class="btn btn-affiliate btn-sm">Sign Up</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-header" style="margin-top:40px"><h2>Feature Comparison</h2></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Feature</th><th>Coinbase</th><th>Binance</th><th>Kraken</th><th>Gemini</th><th>Crypto.com</th><th>KuCoin</th></tr></thead>
+          <tbody>
+            <tr><td>Beginner Friendly</td><td class="check">&#10003;</td><td class="cross">&#8212;</td><td class="cross">&#8212;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="cross">&#8212;</td></tr>
+            <tr><td>Advanced Trading</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>Mobile App</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>Staking</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
+            <tr><td>NFT Marketplace</td><td class="cross">&#8212;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="check">&#10003;</td><td class="cross">&#8212;</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cta-banner" style="margin-top:36px">
+        <div>
+          <div class="partner">Sponsored Partner</div>
+          <h3>Not sure where to start?</h3>
+          <p>Coinbase is our top pick for beginners. Trusted by 110M+ users worldwide.</p>
+        </div>
+        <a href="#affiliate" target="_blank" class="btn btn-affiliate">Open Coinbase Account &rarr;</a>
+      </div>
+
+      <div class="disclosure" style="margin-top:24px"><strong>Affiliate Disclosure:</strong> This page contains affiliate links. We may earn a commission at no extra cost to you when you sign up through our links. This helps us maintain free tools and educational content. We only recommend exchanges we have thoroughly researched.</div>
+    </div>
+  </section>
+  <!-- LEARN -->
+  <section id="sec-learn" class="section">
+    <div class="container">
+      <div class="section-header" style="margin-top:36px"><h2>Free Crypto Education</h2><p>Make informed decisions with our expert-written guides and tutorials</p></div>
+      <div class="learn-grid">
+        <div class="learn-card" onclick="openArticle(0)"><div class="lc-icon" style="background:rgba(245,158,11,.12);color:#f59e0b">&#9874;</div><h4>What is Bitcoin Mining in 2026?</h4><div class="lc-meta"><span>8 min read</span><span class="badge beginner">Beginner</span></div></div>
+        <div class="learn-card" onclick="openArticle(1)"><div class="lc-icon" style="background:rgba(59,130,246,.12);color:#3b82f6">&#128200;</div><h4>How to Choose a Crypto Exchange</h4><div class="lc-meta"><span>6 min read</span><span class="badge beginner">Beginner</span></div></div>
+        <div class="learn-card" onclick="openArticle(2)"><div class="lc-icon" style="background:rgba(16,185,129,.12);color:#10b981">&#9878;</div><h4>Mining vs Staking: Which is More Profitable?</h4><div class="lc-meta"><span>10 min read</span><span class="badge intermediate">Intermediate</span></div></div>
+        <div class="learn-card" onclick="openArticle(3)"><div class="lc-icon" style="background:rgba(139,92,246,.12);color:#8b5cf6">&#128296;</div><h4>Understanding Hash Rate &amp; Difficulty</h4><div class="lc-meta"><span>7 min read</span><span class="badge intermediate">Intermediate</span></div></div>
+        <div class="learn-card" onclick="openArticle(4)"><div class="lc-icon" style="background:rgba(6,182,212,.12);color:#06b6d4">&#128176;</div><h4>Top 5 Coins to Mine at Home</h4><div class="lc-meta"><span>9 min read</span><span class="badge beginner">Beginner</span></div></div>
+        <div class="learn-card" onclick="openArticle(5)"><div class="lc-icon" style="background:rgba(239,68,68,.12);color:#ef4444">&#128203;</div><h4>Crypto Tax Guide for Beginners</h4><div class="lc-meta"><span>12 min read</span><span class="badge intermediate">Intermediate</span></div></div>
+        <div class="learn-card" onclick="openArticle(6)"><div class="lc-icon" style="background:rgba(16,185,129,.12);color:#10b981">&#128274;</div><h4>Hardware Wallet Security 101</h4><div class="lc-meta"><span>5 min read</span><span class="badge beginner">Beginner</span></div></div>
+        <div class="learn-card" onclick="openArticle(7)"><div class="lc-icon" style="background:rgba(245,158,11,.12);color:#f59e0b">&#9729;</div><h4>Is Cloud Mining Worth It?</h4><div class="lc-meta"><span>8 min read</span><span class="badge advanced">Advanced</span></div></div>
+      </div>
+      <!-- ARTICLE READER -->
+      <div id="article-reader" style="display:none;margin-top:12px">
+        <button class="btn btn-outline btn-sm" onclick="closeArticle()" style="margin-bottom:20px">&larr; Back to Articles</button>
+        <div class="card" id="article-content" style="line-height:1.85;font-size:.95rem"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- BOTTOM AD -->
+<div class="container"><div class="ad-slot" style="margin-top:40px" id="ad-bottom">
+  <!-- ADSENSE STEP: Paste a 728x90 Leaderboard ad unit code here -->
+  728 x 90 &mdash; Advertisement<span>Your Google AdSense code goes here</span>
+</div></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <h5>CryptoVault Tools</h5>
+        <p>Free professional-grade crypto tools and education. Our mission is to make cryptocurrency accessible to everyone through reliable data, honest reviews, and unbiased educational content.</p>
+      </div>
+      <div>
+        <h5>Quick Links</h5>
+        <ul class="footer-links">
+          <li><a href="#" onclick="switchTab('dashboard');return false">Dashboard</a></li>
+          <li><a href="#" onclick="switchTab('mining');return false">Mining Calculator</a></li>
+          <li><a href="#" onclick="switchTab('exchanges');return false">Exchange Comparison</a></li>
+          <li><a href="#" onclick="switchTab('learn');return false">Learn</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Disclaimer</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Get Weekly Crypto Insights</h5>
+        <p>Join 45,000+ subscribers. No spam, unsubscribe anytime.</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault();this.innerHTML='<p style=color:var(--green)>Thanks! Check your inbox.</p>'">
+          <input type="email" placeholder="you@email.com" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="disclosure"><strong>Affiliate Disclosure:</strong> CryptoVault Tools may receive compensation from the companies whose products and services we review or recommend. This does not affect our editorial independence. We are committed to providing honest and unbiased information. All opinions expressed are our own.</div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 CryptoVault Tools. All rights reserved. Not financial advice.</p>
+      <p>Prices are for informational purposes only and may be delayed.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ============================================================
+// AFFILIATE LINK CONFIGURATION
+// ============================================================
+// Replace these with YOUR actual affiliate URLs after signing up.
+// Each program is free to join:
+//   - Coinbase: https://www.coinbase.com/affiliates
+//   - Binance:  https://www.binance.com/en/activity/affiliate
+//   - Kraken:   https://www.kraken.com/features/affiliate-program
+//   - Amazon:   https://affiliate-program.amazon.com
+// Once you have your links, paste them below:
+const AFFILIATE_LINKS = {
+  coinbase:  '#affiliate',  // Replace with: https://coinbase.com/join/YOUR_ID
+  binance:   '#affiliate',  // Replace with: https://accounts.binance.com/register?ref=YOUR_ID
+  kraken:    '#affiliate',  // Replace with: https://www.kraken.com/sign-up?ref=YOUR_ID
+  gemini:    '#affiliate',  // Replace with: https://gemini.com/share/YOUR_ID
+  cryptodotcom: '#affiliate', // Replace with your Crypto.com referral link
+  kucoin:    '#affiliate',  // Replace with: https://www.kucoin.com/r/YOUR_ID
+  amazon_miner1: '#affiliate', // Replace with Amazon affiliate link for Antminer S21
+  amazon_miner2: '#affiliate', // Replace with Amazon affiliate link for Whatsminer M60S
+  amazon_miner3: '#affiliate', // Replace with Amazon affiliate link for Antminer L9
+  amazon_miner4: '#affiliate', // Replace with Amazon affiliate link for IceRiver KS5
+  get_started:   '#affiliate'  // Replace with your preferred exchange signup link
+};
+
+// Apply affiliate links to all buttons on page load
+document.addEventListener('DOMContentLoaded', () => {
+  // Map buttons to their affiliate links by position
+  const exchangeRows = document.querySelectorAll('.exchange-row .btn-affiliate');
+  const exchangeKeys = ['coinbase','binance','kraken','gemini','cryptodotcom','kucoin'];
+  exchangeRows.forEach((btn, i) => { if (exchangeKeys[i]) btn.href = AFFILIATE_LINKS[exchangeKeys[i]]; });
+
+  const hwButtons = document.querySelectorAll('.hw-card .btn-affiliate');
+  const hwKeys = ['amazon_miner1','amazon_miner2','amazon_miner3','amazon_miner4'];
+  hwButtons.forEach((btn, i) => { if (hwKeys[i]) btn.href = AFFILIATE_LINKS[hwKeys[i]]; });
+
+  document.querySelectorAll('.cta-banner .btn-affiliate').forEach(btn => { btn.href = AFFILIATE_LINKS.coinbase; });
+  document.querySelector('.cta-header').href = AFFILIATE_LINKS.get_started;
+});
+
+// ============================================================
+// CRYPTO DATA — starts with defaults, then fetches live prices
+// ============================================================
+const cryptoData = [
+  {rank:1,symbol:'BTC',name:'Bitcoin',id:'bitcoin',price:98450,change24h:2.14,change7d:5.82,mcap:'1.87T',icon:'&#8383;'},
+  {rank:2,symbol:'ETH',name:'Ethereum',id:'ethereum',price:4215,change24h:-0.73,change7d:3.21,mcap:'506.8B',icon:'&#9830;'},
+  {rank:3,symbol:'SOL',name:'Solana',id:'solana',price:287.50,change24h:4.56,change7d:12.34,mcap:'132.4B',icon:'&#9788;'},
+  {rank:4,symbol:'XRP',name:'XRP',id:'ripple',price:3.12,change24h:1.28,change7d:-2.15,mcap:'162.3B',icon:'&#10005;'},
+  {rank:5,symbol:'DOGE',name:'Dogecoin',id:'dogecoin',price:0.385,change24h:-1.42,change7d:8.67,mcap:'55.6B',icon:'&#8363;'},
+  {rank:6,symbol:'ADA',name:'Cardano',id:'cardano',price:1.24,change24h:0.85,change7d:4.12,mcap:'44.2B',icon:'&#9827;'},
+  {rank:7,symbol:'AVAX',name:'Avalanche',id:'avalanche-2',price:62.30,change24h:3.21,change7d:7.45,mcap:'25.4B',icon:'&#9650;'},
+  {rank:8,symbol:'DOT',name:'Polkadot',id:'polkadot',price:14.85,change24h:-0.52,change7d:1.87,mcap:'21.3B',icon:'&#9679;'},
+  {rank:9,symbol:'LINK',name:'Chainlink',id:'chainlink',price:28.90,change24h:1.95,change7d:6.32,mcap:'18.1B',icon:'&#9741;'},
+  {rank:10,symbol:'KAS',name:'Kaspa',id:'kaspa',price:0.245,change24h:5.67,change7d:15.23,mcap:'6.1B',icon:'K'}
+];
+
+// ============================================================
+// UTILITY FUNCTIONS
+// ============================================================
+function fmt(n,dec=2){if(Math.abs(n)>=1e12)return '$'+(n/1e12).toFixed(2)+'T';if(Math.abs(n)>=1e9)return '$'+(n/1e9).toFixed(2)+'B';if(Math.abs(n)>=1e6)return '$'+(n/1e6).toFixed(2)+'M';return '$'+n.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec})}
+function fmtMcap(n){if(n>=1e12)return '$'+(n/1e12).toFixed(2)+'T';if(n>=1e9)return '$'+(n/1e9).toFixed(1)+'B';if(n>=1e6)return '$'+(n/1e6).toFixed(1)+'M';return '$'+n.toLocaleString()}
+function fmtNum(n,dec=2){return n.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec})}
+function fmtPrice(p){if(p>=1000)return fmt(p,2);if(p>=1)return '$'+fmtNum(p,2);return '$'+fmtNum(p,4)}
+function chgClass(v){return v>=0?'up':'down'}
+function chgStr(v){return(v>=0?'+':'')+v.toFixed(2)+'%'}
+function rand(min,max){return Math.random()*(max-min)+min}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function switchTab(tab){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+tab).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.toggle('active',b.dataset.tab===tab)});
+  document.querySelector('.nav').classList.remove('open');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ============================================================
+// TICKER BAR
+// ============================================================
+function buildTicker(){
+  const track=document.getElementById('ticker-track');
+  const tickers=cryptoData.slice(0,6);
+  let html='';
+  for(let i=0;i<2;i++){tickers.forEach(c=>{html+=`<div class="ticker-item"><span class="symbol">${c.symbol}</span><span class="price mono">${fmtPrice(c.price)}</span><span class="change ${chgClass(c.change24h)}">${chgStr(c.change24h)}</span></div>`})}
+  track.innerHTML=html;
+}
+
+// ============================================================
+// TOP 10 TABLE
+// ============================================================
+function buildTop10(){
+  const tbody=document.getElementById('top10-body');
+  tbody.innerHTML=cryptoData.map(c=>`<tr><td class="mono" style="color:var(--text3)">${c.rank}</td><td><strong style="color:#fff">${c.icon} ${c.name}</strong> <span style="color:var(--text3)">${c.symbol}</span></td><td class="mono">${fmtPrice(c.price)}</td><td class="mono"><span class="change ${chgClass(c.change24h)}">${chgStr(c.change24h)}</span></td><td class="mono"><span class="change ${chgClass(c.change7d)}">${chgStr(c.change7d)}</span></td><td class="mono" style="color:var(--text2)">${c.mcap}</td></tr>`).join('');
+}
+
+// ============================================================
+// LIVE PRICE FETCHING (CoinGecko free API — no key needed)
+// ============================================================
+let liveEnabled = false;
+
+async function fetchLivePrices() {
+  try {
+    const ids = cryptoData.map(c => c.id).join(',');
+    const url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=' + ids + '&order=market_cap_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h,7d';
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('API returned ' + resp.status);
+    const data = await resp.json();
+
+    // Map API data back to our array
+    data.forEach(coin => {
+      const match = cryptoData.find(c => c.id === coin.id);
+      if (match) {
+        match.price = coin.current_price;
+        match.change24h = coin.price_change_percentage_24h || 0;
+        match.change7d = coin.price_change_percentage_7d_in_currency || match.change7d;
+        match.mcap = fmtMcap(coin.market_cap);
+      }
+    });
+
+    // Update market overview cards
+    const totalMcap = data.reduce((s, c) => s + (c.market_cap || 0), 0);
+    const btcDom = data.find(c => c.id === 'bitcoin');
+    if (btcDom) {
+      const domPct = ((btcDom.market_cap / totalMcap) * 100).toFixed(1);
+      document.getElementById('s-btcdom').textContent = domPct + '%';
+    }
+    document.getElementById('s-mcap').textContent = fmtMcap(totalMcap * 3.2); // Approximate full market
+
+    liveEnabled = true;
+    buildTicker();
+    buildTop10();
+    console.log('Live prices updated from CoinGecko');
+  } catch (err) {
+    console.log('CoinGecko fetch failed, using simulated prices:', err.message);
+    // Fall back to simulated fluctuations
+    if (!liveEnabled) simulatePrices();
+  }
+}
+
+function simulatePrices() {
+  cryptoData.forEach(c => {
+    c.price *= (1 + rand(-0.003, 0.003));
+    c.change24h += rand(-0.15, 0.15);
+  });
+  buildTicker();
+  buildTop10();
+}
+
+// Fetch live every 60 seconds, simulate in between
+function startPriceUpdates() {
+  fetchLivePrices(); // Initial fetch
+  setInterval(() => { fetchLivePrices(); }, 60000); // Refresh from API every 60s
+  setInterval(() => { if (liveEnabled) { /* small visual jitter */ simulatePrices(); } }, 8000);
+}
+
+// ============================================================
+// MINING CALCULATOR
+// ============================================================
+const miningParams={
+  BTC:{unit:'TH/s',blockReward:3.125,blockTime:600,networkHash:750e6,price:98450,algo:'SHA-256'},
+  ETC:{unit:'MH/s',blockReward:2.56,blockTime:13,networkHash:350e6,price:42.50,algo:'Etchash'},
+  LTC:{unit:'GH/s',blockReward:6.25,blockTime:150,networkHash:2.1e6,price:145.80,algo:'Scrypt'},
+  DOGE:{unit:'GH/s',blockReward:10000,blockTime:60,networkHash:1.8e6,price:0.385,algo:'Scrypt'},
+  KAS:{unit:'TH/s',blockReward:50.2,blockTime:1,networkHash:450e3,price:0.245,algo:'kHeavyHash'}
+};
+
+document.getElementById('m-coin').addEventListener('change',function(){
+  document.getElementById('m-hashunit').textContent=miningParams[this.value].unit;
+});
+
+function calculateMining(){
+  const coin=document.getElementById('m-coin').value;
+  const p=miningParams[coin];
+  // Use live price if available
+  const livePrice = cryptoData.find(c => c.symbol === coin);
+  const coinPrice = livePrice ? livePrice.price : p.price;
+
+  const hashrate=parseFloat(document.getElementById('m-hashrate').value)||0;
+  const power=parseFloat(document.getElementById('m-power').value)||0;
+  const elecCost=parseFloat(document.getElementById('m-elec').value)||0;
+  const poolFee=parseFloat(document.getElementById('m-pool').value)||0;
+  const hwCost=parseFloat(document.getElementById('m-hwcost').value)||0;
+
+  const blocksPerDay=86400/p.blockTime;
+  const dailyCoins=(hashrate/p.networkHash)*blocksPerDay*p.blockReward;
+  const dailyRevenue=dailyCoins*coinPrice*(1-poolFee/100);
+  const dailyElec=(power/1000)*24*elecCost;
+  const dailyProfit=dailyRevenue-dailyElec;
+  const monthlyProfit=dailyProfit*30;
+  const yearlyProfit=dailyProfit*365;
+  const breakEven=dailyProfit>0?(hwCost/dailyProfit):Infinity;
+  const roi=yearlyProfit>0?((yearlyProfit/hwCost)*100):-100;
+
+  const grid=document.getElementById('results-grid');
+  const vc=v=>v>=0?'profit':'loss';
+  grid.innerHTML=`
+    <div class="result-card"><div class="rlabel">Daily Revenue</div><div class="rvalue profit mono">${fmt(dailyRevenue)}</div></div>
+    <div class="result-card"><div class="rlabel">Daily Electricity</div><div class="rvalue loss mono">-${fmt(dailyElec)}</div></div>
+    <div class="result-card"><div class="rlabel">Daily Profit</div><div class="rvalue ${vc(dailyProfit)} mono">${fmt(dailyProfit)}</div></div>
+    <div class="result-card"><div class="rlabel">Monthly Profit</div><div class="rvalue ${vc(monthlyProfit)} mono">${fmt(monthlyProfit)}</div></div>
+    <div class="result-card"><div class="rlabel">Yearly Profit</div><div class="rvalue ${vc(yearlyProfit)} mono">${fmt(yearlyProfit)}</div></div>
+    <div class="result-card"><div class="rlabel">Break-Even</div><div class="rvalue mono" style="color:var(--cyan)">${breakEven===Infinity?'Never':Math.ceil(breakEven)+' days'}</div></div>
+    <div class="result-card"><div class="rlabel">Annual ROI</div><div class="rvalue ${vc(roi)} mono">${roi.toFixed(1)}%</div></div>
+    <div class="result-card"><div class="rlabel">Coins / Day</div><div class="rvalue mono" style="color:var(--yellow)">${dailyCoins<0.001?dailyCoins.toFixed(6):fmtNum(dailyCoins,4)} ${coin}</div></div>
+  `;
+  document.getElementById('mining-results').style.display='block';
+  document.getElementById('mining-results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function resetMining(){
+  document.getElementById('m-hashrate').value='140';
+  document.getElementById('m-power').value='3010';
+  document.getElementById('m-elec').value='0.10';
+  document.getElementById('m-pool').value='1';
+  document.getElementById('m-hwcost').value='5000';
+  document.getElementById('m-coin').value='BTC';
+  document.getElementById('m-hashunit').textContent='TH/s';
+  document.getElementById('mining-results').style.display='none';
+}
+
+// ============================================================
+// LEARN — ARTICLE CONTENT
+// ============================================================
+const articles = [
+{title:'What is Bitcoin Mining in 2026?',body:`
+<h2 style="color:#fff;margin-bottom:16px">What is Bitcoin Mining in 2026?</h2>
+<p>Bitcoin mining is the process of using specialized computers to validate transactions on the Bitcoin network and earn BTC as a reward. Miners compete to solve complex mathematical puzzles, and the first to find the solution gets to add the next block of transactions to the blockchain.</p>
+<h3 style="color:#fff;margin:20px 0 10px">How It Works</h3>
+<p>Every ~10 minutes, the Bitcoin network creates a new "block" of transactions. Miners race to find a specific number (called a "nonce") that, when combined with the block data and run through a cryptographic hash function (SHA-256), produces a result below a certain target. This is essentially very fast guessing — your mining hardware tries billions of guesses per second.</p>
+<h3 style="color:#fff;margin:20px 0 10px">The 2024 Halving Impact</h3>
+<p>In April 2024, the Bitcoin block reward was cut in half from 6.25 BTC to 3.125 BTC per block. This "halving" happens every ~4 years and means miners earn less BTC per block. However, if BTC's price rises enough to compensate (which it historically has), mining can remain profitable.</p>
+<h3 style="color:#fff;margin:20px 0 10px">What You Need to Start</h3>
+<ul style="margin:10px 0 10px 20px;color:var(--text2)">
+<li><strong style="color:var(--text)">ASIC Miner</strong> — Specialized hardware like the Antminer S21 ($5,000-$9,000). GPUs are no longer competitive for Bitcoin.</li>
+<li><strong style="color:var(--text)">Cheap Electricity</strong> — Mining profitability depends heavily on your $/kWh rate. Below $0.08/kWh is ideal.</li>
+<li><strong style="color:var(--text)">Mining Pool</strong> — Solo mining is nearly impossible. Pools let you combine hash power and share rewards.</li>
+<li><strong style="color:var(--text)">Cooling & Space</strong> — ASICs generate significant heat and noise.</li>
+</ul>
+<h3 style="color:#fff;margin:20px 0 10px">Is It Worth It?</h3>
+<p>Use our <a href="#" onclick="switchTab('mining');return false" style="color:var(--blue)">Mining Calculator</a> to crunch the numbers for your specific situation. Profitability depends on your electricity cost, hardware efficiency, and BTC's price. In 2026, with BTC trading near $100K, efficient operations with low electricity costs can still be profitable.</p>
+`},
+{title:'How to Choose a Crypto Exchange',body:`
+<h2 style="color:#fff;margin-bottom:16px">How to Choose a Crypto Exchange</h2>
+<p>A crypto exchange is where you buy, sell, and trade cryptocurrency. Choosing the right one matters because they differ significantly in fees, security, available coins, and ease of use.</p>
+<h3 style="color:#fff;margin:20px 0 10px">Key Factors to Consider</h3>
+<p><strong style="color:var(--text)">1. Security</strong> — Look for exchanges with proof of reserves, cold storage for most funds, two-factor authentication (2FA), and a clean track record. Coinbase, Kraken, and Gemini are generally considered the most secure US-regulated options.</p>
+<p><strong style="color:var(--text)">2. Fees</strong> — Trading fees typically range from 0% to 0.6% per trade. Some exchanges offer lower fees for higher volume or when using their native token. Always check the fee schedule — some platforms advertise "zero fees" but make money on the spread (the difference between buy and sell price).</p>
+<p><strong style="color:var(--text)">3. Available Coins</strong> — If you only want Bitcoin and Ethereum, any major exchange works. If you want smaller altcoins, you'll need an exchange with a larger selection like Binance (400+) or KuCoin (800+).</p>
+<p><strong style="color:var(--text)">4. Ease of Use</strong> — Beginners should prioritize simple interfaces. Coinbase and Crypto.com have the most beginner-friendly apps. Advanced traders may prefer Kraken or Binance for their charting tools and order types.</p>
+<p><strong style="color:var(--text)">5. Deposit/Withdrawal Methods</strong> — Check if the exchange accepts your preferred payment method (bank transfer, debit card, PayPal, etc.) and what fees they charge for deposits and withdrawals.</p>
+<h3 style="color:#fff;margin:20px 0 10px">Our Recommendation</h3>
+<p>For most beginners in the US, <strong>Coinbase</strong> is the safest starting point — it's publicly traded, insured, and straightforward. See our full <a href="#" onclick="switchTab('exchanges');return false" style="color:var(--blue)">Exchange Comparison</a> for a detailed breakdown.</p>
+`},
+{title:'Mining vs Staking: Which is More Profitable?',body:`
+<h2 style="color:#fff;margin-bottom:16px">Mining vs Staking: Which is More Profitable?</h2>
+<p>Mining and staking are two different ways to earn crypto rewards, and they work on fundamentally different principles.</p>
+<h3 style="color:#fff;margin:20px 0 10px">Mining (Proof of Work)</h3>
+<p>Mining uses computational power to validate transactions. It requires specialized hardware (ASICs or GPUs), consumes significant electricity, and involves ongoing costs. Coins you can mine include Bitcoin, Litecoin, Dogecoin, Ethereum Classic, and Kaspa.</p>
+<p><strong style="color:var(--green)">Pros:</strong> Earn newly minted coins, hardware has resale value, no lock-up period for your funds.</p>
+<p><strong style="color:var(--red)">Cons:</strong> High upfront cost ($2K-$10K+), ongoing electricity costs, hardware depreciates, noise and heat, difficulty increases over time.</p>
+<h3 style="color:#fff;margin:20px 0 10px">Staking (Proof of Stake)</h3>
+<p>Staking means locking up your existing crypto to help validate transactions on proof-of-stake networks. You earn rewards proportional to how much you stake. Coins you can stake include Ethereum, Solana, Cardano, and Polkadot.</p>
+<p><strong style="color:var(--green)">Pros:</strong> No special hardware needed, no electricity costs, typical APY of 3-8%, passive income with minimal effort.</p>
+<p><strong style="color:var(--red)">Cons:</strong> Your funds may be locked for days/weeks, you need to already own the crypto, rewards are lower than mining during bull markets, slashing risk on some networks.</p>
+<h3 style="color:#fff;margin:20px 0 10px">The Bottom Line</h3>
+<p>Staking has a lower barrier to entry and is simpler. Mining has higher potential returns but requires capital and technical knowledge. If you have $5,000 to invest, staking ETH at ~4% APY would earn ~$200/year passively. That same $5,000 in a mining rig could earn $1,000-$3,000/year — but only if electricity is cheap and BTC price stays high.</p>
+`},
+{title:'Understanding Hash Rate & Difficulty',body:`
+<h2 style="color:#fff;margin-bottom:16px">Understanding Hash Rate & Difficulty</h2>
+<p>Hash rate and difficulty are two of the most important concepts in crypto mining. Understanding them helps you estimate profitability and make better hardware decisions.</p>
+<h3 style="color:#fff;margin:20px 0 10px">What is Hash Rate?</h3>
+<p>Hash rate measures how many guesses (hashes) a mining device can make per second. It's measured in:</p>
+<ul style="margin:10px 0 10px 20px;color:var(--text2)">
+<li><strong style="color:var(--text)">KH/s</strong> — Kilohashes (1,000 hashes/sec)</li>
+<li><strong style="color:var(--text)">MH/s</strong> — Megahashes (1 million hashes/sec)</li>
+<li><strong style="color:var(--text)">GH/s</strong> — Gigahashes (1 billion hashes/sec)</li>
+<li><strong style="color:var(--text)">TH/s</strong> — Terahashes (1 trillion hashes/sec)</li>
+</ul>
+<p>A modern Bitcoin ASIC like the Antminer S21 XP operates at ~270 TH/s — that's 270 trillion guesses every second.</p>
+<h3 style="color:#fff;margin:20px 0 10px">What is Mining Difficulty?</h3>
+<p>Difficulty is an automatically adjusting number that controls how hard it is to find a valid block. The Bitcoin network adjusts difficulty every 2,016 blocks (~2 weeks) to maintain the target of one block every ~10 minutes. If more miners join (total hash rate goes up), difficulty increases. If miners leave, difficulty decreases.</p>
+<h3 style="color:#fff;margin:20px 0 10px">Why This Matters For You</h3>
+<p>Your share of mining rewards equals: <strong style="color:var(--blue)">Your Hash Rate / Total Network Hash Rate</strong>. As difficulty rises, you need more hash power to earn the same amount. This is why mining profitability changes over time — even if BTC price stays flat, increasing difficulty reduces your earnings.</p>
+`},
+{title:'Top 5 Coins to Mine at Home',body:`
+<h2 style="color:#fff;margin-bottom:16px">Top 5 Coins to Mine at Home in 2026</h2>
+<p>Not everyone has access to cheap industrial electricity or warehouse space. Here are the most practical coins for home mining operations.</p>
+<h3 style="color:#fff;margin:20px 0 10px">1. Kaspa (KAS)</h3>
+<p>Kaspa uses the kHeavyHash algorithm and is one of the most profitable coins to mine in 2026. ASIC miners like the IceRiver KS5 Pro are efficient and generate less heat than Bitcoin ASICs. Kaspa's fast block time (1 second) means more frequent payouts.</p>
+<h3 style="color:#fff;margin:20px 0 10px">2. Litecoin (LTC)</h3>
+<p>Litecoin uses the Scrypt algorithm and has been around since 2011. It's a stable, established coin with consistent demand. You also earn Dogecoin simultaneously through merged mining, effectively doubling your revenue streams.</p>
+<h3 style="color:#fff;margin:20px 0 10px">3. Dogecoin (DOGE)</h3>
+<p>If you're mining Litecoin with a Scrypt ASIC, you're already mining Dogecoin too. But DOGE can also be mined on its own and benefits from strong community support and occasional price spikes.</p>
+<h3 style="color:#fff;margin:20px 0 10px">4. Ethereum Classic (ETC)</h3>
+<p>After Ethereum moved to proof of stake, many GPU miners switched to Ethereum Classic. It uses the Etchash algorithm and can still be mined with GPUs, making it accessible without buying expensive ASICs.</p>
+<h3 style="color:#fff;margin:20px 0 10px">5. Bitcoin (BTC)</h3>
+<p>Bitcoin is the most profitable to mine in absolute terms, but requires the highest investment. If you can get electricity below $0.08/kWh and handle the noise/heat of an ASIC, it remains the king. The Antminer S21 XP is currently the most efficient option.</p>
+<p style="margin-top:16px">Use our <a href="#" onclick="switchTab('mining');return false" style="color:var(--blue)">Mining Calculator</a> to compare profitability for each coin with your specific electricity rate.</p>
+`},
+{title:'Crypto Tax Guide for Beginners',body:`
+<h2 style="color:#fff;margin-bottom:16px">Crypto Tax Guide for Beginners (US)</h2>
+<p><em style="color:var(--text3)">Disclaimer: This is general educational information, not tax advice. Consult a tax professional for your specific situation.</em></p>
+<h3 style="color:#fff;margin:20px 0 10px">Is Crypto Taxed?</h3>
+<p>Yes. In the United States, the IRS treats cryptocurrency as property. This means every time you sell, trade, or spend crypto, it's a taxable event. Simply buying and holding is NOT taxed.</p>
+<h3 style="color:#fff;margin:20px 0 10px">Taxable Events</h3>
+<ul style="margin:10px 0 10px 20px;color:var(--text2)">
+<li>Selling crypto for USD (or any fiat currency)</li>
+<li>Trading one crypto for another (e.g., BTC to ETH)</li>
+<li>Spending crypto on goods or services</li>
+<li>Receiving crypto as payment for work</li>
+<li>Mining or staking rewards (taxed as ordinary income when received)</li>
+</ul>
+<h3 style="color:#fff;margin:20px 0 10px">Capital Gains Rates</h3>
+<p><strong style="color:var(--text)">Short-term</strong> (held less than 1 year): Taxed as ordinary income (10-37% depending on your tax bracket).</p>
+<p><strong style="color:var(--text)">Long-term</strong> (held more than 1 year): Taxed at reduced rates of 0%, 15%, or 20% depending on income.</p>
+<h3 style="color:#fff;margin:20px 0 10px">Mining Income</h3>
+<p>If you mine crypto, the fair market value of the coins at the time you receive them is taxable as ordinary income. You can also deduct mining expenses (electricity, hardware depreciation) as business expenses if you operate as a business.</p>
+<h3 style="color:#fff;margin:20px 0 10px">Record Keeping</h3>
+<p>Track every transaction: date, amount, price at time of transaction, and fees paid. Tools like CoinTracker or Koinly can help automate this by connecting to your exchange accounts.</p>
+`},
+{title:'Hardware Wallet Security 101',body:`
+<h2 style="color:#fff;margin-bottom:16px">Hardware Wallet Security 101</h2>
+<p>If you own more than a few hundred dollars in crypto, a hardware wallet is one of the best investments you can make for security.</p>
+<h3 style="color:#fff;margin:20px 0 10px">What is a Hardware Wallet?</h3>
+<p>A hardware wallet is a small physical device (like a USB stick) that stores your crypto's private keys offline. Since the keys never touch the internet, they can't be stolen by hackers, malware, or phishing attacks. Popular options include Ledger Nano X (~$149) and Trezor Model T (~$219).</p>
+<h3 style="color:#fff;margin:20px 0 10px">Why Not Just Use an Exchange?</h3>
+<p>When your crypto is on an exchange (Coinbase, Binance, etc.), the exchange holds your private keys. If the exchange gets hacked, goes bankrupt, or freezes your account, you could lose your funds. The crypto saying "not your keys, not your coins" exists for a reason — FTX's collapse in 2022 proved this painfully.</p>
+<h3 style="color:#fff;margin:20px 0 10px">How to Use One Safely</h3>
+<ul style="margin:10px 0 10px 20px;color:var(--text2)">
+<li><strong style="color:var(--text)">Buy directly from the manufacturer</strong> — Never buy used or from third-party sellers (they could be tampered with).</li>
+<li><strong style="color:var(--text)">Write down your seed phrase on paper</strong> — This 12-24 word phrase is your backup. Store it in a safe, NOT on your phone or computer.</li>
+<li><strong style="color:var(--text)">Never share your seed phrase</strong> — No legitimate company will ever ask for it. Anyone who does is trying to steal your crypto.</li>
+<li><strong style="color:var(--text)">Set a strong PIN</strong> — The device PIN protects against physical theft.</li>
+<li><strong style="color:var(--text)">Keep the firmware updated</strong> — Manufacturers release security updates regularly.</li>
+</ul>
+`},
+{title:'Is Cloud Mining Worth It?',body:`
+<h2 style="color:#fff;margin-bottom:16px">Is Cloud Mining Worth It in 2026?</h2>
+<p>Cloud mining lets you rent mining power from a company instead of buying and running your own hardware. You pay a fee, they do the mining, and you get a share of the rewards. Sounds great — but the reality is more complicated.</p>
+<h3 style="color:#fff;margin:20px 0 10px">How Cloud Mining Works</h3>
+<p>You purchase a "contract" from a cloud mining provider (e.g., 100 TH/s for 12 months at $X). The provider operates mining farms and allocates hash power to your contract. You receive daily payouts minus maintenance fees.</p>
+<h3 style="color:#fff;margin:20px 0 10px">The Problems</h3>
+<p><strong style="color:var(--red)">1. Most cloud mining companies are scams.</strong> This is not an exaggeration. The cloud mining space is riddled with Ponzi schemes that pay early investors with money from new investors until they collapse. Always research thoroughly before sending money.</p>
+<p><strong style="color:var(--red)">2. The math rarely works out.</strong> Legitimate cloud mining companies need to make a profit too. After they take their cut (maintenance fees, contract markup), your returns are almost always lower than if you'd just bought the crypto directly.</p>
+<p><strong style="color:var(--red)">3. You have no control.</strong> You can't switch coins, can't upgrade hardware, can't adjust settings, and if the company shuts down, your investment is gone.</p>
+<h3 style="color:#fff;margin:20px 0 10px">When It Might Make Sense</h3>
+<p>The only scenario where cloud mining works is if you find a <em>legitimate</em> provider (very few exist), you're in a location where running hardware is impossible, and you're okay with lower returns than buying crypto directly. Companies like NiceHash (which is more of a hash marketplace) or Genesis Mining (one of the oldest providers) are more reputable than most, but do your own research.</p>
+<h3 style="color:#fff;margin:20px 0 10px">Our Verdict</h3>
+<p>For most people, <strong>buying crypto directly on an exchange</strong> or <strong>running your own hardware</strong> will give better returns than cloud mining. If you want passive crypto income without hardware, <strong>staking</strong> is a safer, more transparent alternative.</p>
+`}
+];
+
+function openArticle(idx) {
+  const a = articles[idx];
+  document.getElementById('article-content').innerHTML = a.body;
+  document.querySelector('.learn-grid').style.display = 'none';
+  document.getElementById('article-reader').style.display = 'block';
+  window.scrollTo({top: 200, behavior: 'smooth'});
+}
+
+function closeArticle() {
+  document.getElementById('article-reader').style.display = 'none';
+  document.querySelector('.learn-grid').style.display = '';
+}
+
+// ============================================================
+// INIT
+// ============================================================
+buildTicker();
+buildTop10();
+startPriceUpdates();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
