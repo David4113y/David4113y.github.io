@@ -200,6 +200,37 @@ h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
 /* === MINING SIDEBAR LAYOUT === */
 .mining-layout{display:grid;grid-template-columns:1fr 280px;gap:24px}
 @media(max-width:900px){.mining-layout{grid-template-columns:1fr}}
+
+/* === NAV TOOLBOX LINK === */
+.nav-toolbox{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff !important;padding:7px 16px;border-radius:8px;font-size:.82rem;font-weight:600;text-decoration:none !important;transition:all .25s;white-space:nowrap}
+.nav-toolbox:hover{transform:translateY(-1px);box-shadow:0 0 16px rgba(139,92,246,.4)}
+
+/* === DONATION / SUPPORT SECTION === */
+.support-section{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20px}
+.support-inner{max-width:var(--max-w);margin:0 auto}
+.support-header{text-align:center;margin-bottom:32px}
+.support-header h2{font-size:1.8rem;color:#fff;margin-bottom:8px;font-family:var(--font-heading)}
+.support-header p{color:var(--text2);font-size:.95rem;max-width:600px;margin:0 auto}
+.support-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:768px){.support-grid{grid-template-columns:1fr}}
+
+.support-card{background:var(--bg);border:1px solid var(--border2);border-radius:14px;padding:28px}
+.support-card h3{color:#fff;font-size:1.1rem;margin-bottom:16px;font-family:var(--font-heading);display:flex;align-items:center;gap:10px}
+.support-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.support-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-size:.88rem;font-weight:600;color:#fff;text-decoration:none !important;transition:all .25s;border:none;cursor:pointer}
+.support-btn:hover{transform:translateY(-2px);text-decoration:none !important}
+.support-btn.bmc{background:linear-gradient(135deg,#ff813f,#ffdd00);color:#000}
+.support-btn.paypal{background:linear-gradient(135deg,#003087,#009cde)}
+.support-btn.kofi{background:linear-gradient(135deg,#ff5e5b,#ff9472)}
+.support-btn.coinbase-ref{background:linear-gradient(135deg,#0052ff,#3b82f6)}
+
+.crypto-addr{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;margin-bottom:10px;transition:border-color .2s}
+.crypto-addr:hover{border-color:var(--blue)}
+.crypto-addr .addr-label{font-size:.78rem;color:var(--text3);font-weight:600;min-width:36px;text-transform:uppercase;letter-spacing:.04em}
+.crypto-addr .addr-value{font-family:var(--font-mono);font-size:.78rem;color:var(--text2);word-break:break-all;flex:1}
+.crypto-addr .copy-btn{background:var(--blue);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s}
+.crypto-addr .copy-btn:hover{background:#2563eb}
+.crypto-addr .copy-btn.copied{background:var(--green)}
 </style>
 </head>
 <body>
@@ -218,6 +249,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
       <button class="nav-btn" data-tab="exchanges" onclick="switchTab('exchanges')">Exchanges</button>
       <button class="nav-btn" data-tab="learn" onclick="switchTab('learn')">Learn</button>
     </nav>
+    <a href="https://davidalleyway-arch.github.io/toolbox-io/" target="_blank" class="nav-toolbox">ToolBox.io</a>
     <a href="#affiliate" target="_blank" class="cta-header">Get Started Free</a>
   </div>
 </header>
@@ -407,6 +439,44 @@ h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div></div>
 
+<!-- SUPPORT / DONATE -->
+<section class="support-section">
+  <div class="support-inner">
+    <div class="support-header">
+      <h2>Support CryptoVault Tools</h2>
+      <p>If you find our tools and guides useful, consider supporting the project. Every contribution helps us keep things free and ad-light.</p>
+    </div>
+    <div class="support-grid">
+      <div class="support-card">
+        <h3>&#9749; Buy Us a Coffee</h3>
+        <div class="support-buttons">
+          <a href="https://www.buymeacoffee.com/david4113y" target="_blank" class="support-btn bmc">&#9749; Buy Me a Coffee</a>
+          <a href="https://paypal.me/yourusername" target="_blank" class="support-btn paypal">&#128179; PayPal</a>
+          <a href="https://ko-fi.com/yourusername" target="_blank" class="support-btn kofi">&#10084; Ko-fi</a>
+        </div>
+      </div>
+      <div class="support-card">
+        <h3>&#128279; Coinbase Referral</h3>
+        <p style="color:var(--text2);font-size:.88rem;margin-bottom:14px">Sign up for Coinbase through our link and we both earn rewards.</p>
+        <a href="https://coinbase.com/join/7FDYK4L?src=ios-link" target="_blank" class="support-btn coinbase-ref">Join Coinbase &amp; Earn &rarr;</a>
+      </div>
+      <div class="support-card" style="grid-column:1/-1">
+        <h3>&#9935; Donate Crypto Directly</h3>
+        <div class="crypto-addr">
+          <span class="addr-label">BTC</span>
+          <span class="addr-value">39AtEDjsGNcyS9yfJiKEznGsmf5vVH2jUs</span>
+          <button class="copy-btn" onclick="copyAddr(this,'39AtEDjsGNcyS9yfJiKEznGsmf5vVH2jUs')">Copy</button>
+        </div>
+        <div class="crypto-addr">
+          <span class="addr-label">ETH</span>
+          <span class="addr-value">0xe3Ce3BF963704b8ce6803db9161e7a8fd4F858Dc</span>
+          <button class="copy-btn" onclick="copyAddr(this,'0xe3Ce3BF963704b8ce6803db9161e7a8fd4F858Dc')">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
@@ -422,6 +492,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
           <li><a href="#" onclick="switchTab('mining');return false">Mining Calculator</a></li>
           <li><a href="#" onclick="switchTab('exchanges');return false">Exchange Comparison</a></li>
           <li><a href="#" onclick="switchTab('learn');return false">Learn</a></li>
+          <li><a href="https://davidalleyway-arch.github.io/toolbox-io/" target="_blank" style="color:var(--purple)">ToolBox.io &rarr;</a></li>
         </ul>
       </div>
       <div>
@@ -446,6 +517,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
     <div class="footer-bottom">
       <p>&copy; 2026 CryptoVault Tools. All rights reserved. Not financial advice.</p>
       <p>Prices are for informational purposes only and may be delayed.</p>
+      <p><a href="https://davidalleyway-arch.github.io/toolbox-io/" target="_blank" style="color:var(--purple)">Visit ToolBox.io</a> &mdash; More free tools from the same creator.</p>
     </div>
   </div>
 </footer>
@@ -462,7 +534,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
 //   - Amazon:   https://affiliate-program.amazon.com
 // Once you have your links, paste them below:
 const AFFILIATE_LINKS = {
-  coinbase:  '#affiliate',  // Replace with: https://coinbase.com/join/YOUR_ID
+  coinbase:  'https://coinbase.com/join/7FDYK4L?src=ios-link',  // Coinbase referral link
   binance:   '#affiliate',  // Replace with: https://accounts.binance.com/register?ref=YOUR_ID
   kraken:    '#affiliate',  // Replace with: https://www.kraken.com/sign-up?ref=YOUR_ID
   gemini:    '#affiliate',  // Replace with: https://gemini.com/share/YOUR_ID
@@ -472,7 +544,7 @@ const AFFILIATE_LINKS = {
   amazon_miner2: '#affiliate', // Replace with Amazon affiliate link for Whatsminer M60S
   amazon_miner3: '#affiliate', // Replace with Amazon affiliate link for Antminer L9
   amazon_miner4: '#affiliate', // Replace with Amazon affiliate link for IceRiver KS5
-  get_started:   '#affiliate'  // Replace with your preferred exchange signup link
+  get_started:   'https://coinbase.com/join/7FDYK4L?src=ios-link'  // Coinbase referral link
 };
 
 // Apply affiliate links to all buttons on page load
@@ -815,6 +887,26 @@ function openArticle(idx) {
 function closeArticle() {
   document.getElementById('article-reader').style.display = 'none';
   document.querySelector('.learn-grid').style.display = '';
+}
+
+// ============================================================
+// COPY CRYPTO ADDRESS
+// ============================================================
+function copyAddr(btn, addr) {
+  navigator.clipboard.writeText(addr).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = addr; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
 }
 
 // ============================================================
