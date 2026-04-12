@@ -231,6 +231,66 @@ h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
 .crypto-addr .copy-btn{background:var(--blue);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s}
 .crypto-addr .copy-btn:hover{background:#2563eb}
 .crypto-addr .copy-btn.copied{background:var(--green)}
+
+/* --- Store Section --- */
+.store-header{text-align:center;margin-bottom:3rem}
+.store-header h2{font-family:var(--font-heading);font-size:2.2rem;color:var(--text);margin-bottom:.5rem}
+.store-header .store-subtitle{color:var(--text2);font-size:1.05rem;max-width:600px;margin:0 auto;line-height:1.6}
+.store-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;margin-bottom:3.5rem}
+.store-card{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:1.75rem;position:relative;transition:transform .25s,box-shadow .25s,border-color .25s;display:flex;flex-direction:column}
+.store-card:hover{transform:translateY(-4px);box-shadow:0 0 24px rgba(59,130,246,.12);border-color:var(--blue)}
+.store-tag{position:absolute;top:14px;right:14px;font-family:var(--font-body);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:20px;color:#fff}
+.store-tag--popular{background:linear-gradient(135deg,var(--blue),var(--purple))}
+.store-tag--value{background:linear-gradient(135deg,var(--green),var(--cyan))}
+.store-card-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1rem;flex-shrink:0}
+.store-card h3{font-family:var(--font-heading);font-size:1.15rem;color:var(--text);margin:0 0 .5rem}
+.store-card .store-desc{color:var(--text2);font-size:.88rem;line-height:1.55;margin-bottom:1rem}
+.store-price{display:inline-block;font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--green);margin-bottom:1rem}
+.store-price span{font-size:.78rem;font-weight:400;color:var(--text3)}
+.store-features{list-style:none;padding:0;margin:0 0 1.5rem;flex:1}
+.store-features li{color:var(--text2);font-size:.82rem;padding:5px 0;padding-left:1.25rem;position:relative;line-height:1.45}
+.store-features li::before{content:'\2713';position:absolute;left:0;color:var(--green);font-weight:700;font-size:.78rem}
+.store-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.75rem 1rem;border:none;border-radius:10px;font-family:var(--font-body);font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s,box-shadow .2s;color:#fff;background:linear-gradient(135deg,var(--blue),var(--purple));margin-top:auto}
+.store-btn:hover{box-shadow:0 0 18px rgba(59,130,246,.35)}
+.store-btn svg{width:16px;height:16px;flex-shrink:0}
+.store-icon-signal{background:rgba(59,130,246,.15)}
+.store-icon-grid{background:rgba(139,92,246,.15)}
+.store-icon-whale{background:rgba(6,182,212,.15)}
+.store-icon-dca{background:rgba(16,185,129,.15)}
+.store-icon-rebalance{background:rgba(245,158,11,.15)}
+.store-icon-arb{background:rgba(239,68,68,.15)}
+.store-faq{max-width:740px;margin:0 auto}
+.store-faq h3{font-family:var(--font-heading);font-size:1.35rem;color:var(--text);text-align:center;margin-bottom:1.5rem}
+.faq-item{background:var(--bg3);border:1px solid var(--border);border-radius:12px;margin-bottom:.75rem;overflow:hidden;transition:border-color .2s}
+.faq-item:hover{border-color:var(--border2)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;cursor:pointer;color:var(--text);font-size:.92rem;font-weight:600;font-family:var(--font-body);user-select:none}
+.faq-q::after{content:'+';font-size:1.2rem;color:var(--text3);transition:transform .25s;flex-shrink:0;margin-left:1rem}
+.faq-item.open .faq-q::after{transform:rotate(45deg);color:var(--blue)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 1.25rem}
+.faq-item.open .faq-a{max-height:200px;padding:0 1.25rem 1rem}
+.faq-a p{color:var(--text2);font-size:.85rem;line-height:1.6;margin:0}
+.store-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem}
+.store-modal-overlay.active{display:flex}
+.store-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:18px;max-width:440px;width:100%;padding:2rem;position:relative;box-shadow:0 0 40px rgba(59,130,246,.12);animation:storeModalIn .25s ease}
+@keyframes storeModalIn{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.store-modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text3);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px;transition:color .2s}
+.store-modal-close:hover{color:var(--text)}
+.store-modal h4{font-family:var(--font-heading);font-size:1.2rem;color:var(--text);margin:0 0 .25rem}
+.store-modal .modal-product-desc{color:var(--text2);font-size:.85rem;margin-bottom:1.25rem;line-height:1.5}
+.store-modal .modal-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.88rem}
+.store-modal .modal-row:last-of-type{border-bottom:none}
+.store-modal .modal-label{color:var(--text3)}
+.store-modal .modal-value{color:var(--text);font-family:var(--font-mono);font-weight:600}
+.store-modal .modal-total .modal-value{color:var(--green);font-size:1.05rem}
+.store-modal-actions{display:flex;gap:.75rem;margin-top:1.5rem}
+.store-modal-actions .btn-cancel{flex:1;padding:.7rem;border-radius:10px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:var(--font-body);font-size:.88rem;font-weight:600;cursor:pointer;transition:border-color .2s,color .2s}
+.store-modal-actions .btn-cancel:hover{border-color:var(--text3);color:var(--text)}
+.store-modal-actions .btn-confirm{flex:1.4;padding:.7rem;border-radius:10px;border:none;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;font-family:var(--font-body);font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.4rem;transition:box-shadow .2s;text-decoration:none}
+.store-modal-actions .btn-confirm:hover{box-shadow:0 0 18px rgba(59,130,246,.35)}
+@media(max-width:720px){
+  .store-grid{grid-template-columns:1fr}
+  .store-header h2{font-size:1.6rem}
+}
 </style>
 </head>
 <body>
@@ -248,6 +308,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
       <button class="nav-btn" data-tab="mining" onclick="switchTab('mining')">Mining Calculator</button>
       <button class="nav-btn" data-tab="exchanges" onclick="switchTab('exchanges')">Exchanges</button>
       <button class="nav-btn" data-tab="learn" onclick="switchTab('learn')">Learn</button>
+      <button class="nav-btn" data-tab="store" onclick="switchTab('store')">Store</button>
     </nav>
     <a href="https://davidalleyway-arch.github.io/toolbox-io/" target="_blank" class="nav-toolbox">ToolBox.io</a>
     <a href="https://david4113y.github.io/domainforge/" target="_blank" class="nav-toolbox" style="background:linear-gradient(135deg,#00d4ff,#0090b8)">DomainForge</a>
@@ -428,6 +489,129 @@ h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
       </div>
     </div>
   </section>
+  <!-- STORE -->
+  <section id="sec-store" class="section">
+    <div class="container">
+      <div class="store-header" style="margin-top:36px">
+        <h2>CryptoVault Store</h2>
+        <p class="store-subtitle">Professional-grade trading tools and signals to sharpen your edge. All products connect to your existing exchange accounts &mdash; no fund custody required.</p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card">
+          <div class="store-card-icon store-icon-signal">&#128225;</div>
+          <h3>CryptoVault Signal Pro</h3>
+          <p class="store-desc">Premium crypto trading signals delivered to Telegram. Daily BTC/ETH/ALT signals with entry, stop-loss, and take-profit levels.</p>
+          <div class="store-price">$29<span> /month</span></div>
+          <ul class="store-features">
+            <li>3&ndash;5 daily signals across BTC, ETH &amp; alts</li>
+            <li>Entry, stop-loss &amp; take-profit levels included</li>
+            <li>Instant Telegram delivery with alerts</li>
+            <li>Monthly win-rate reports &amp; analytics</li>
+          </ul>
+          <button class="store-btn" onclick="openStoreModal('CryptoVault Signal Pro','Premium trading signals via Telegram','29')">Buy Now</button>
+        </div>
+        <div class="store-card">
+          <span class="store-tag store-tag--popular">Popular</span>
+          <div class="store-card-icon store-icon-grid">&#129302;</div>
+          <h3>AutoGrid Trading Bot</h3>
+          <p class="store-desc">Automated grid trading bot for Binance &amp; KuCoin. Set and forget &mdash; runs 24/7 with customizable grid parameters.</p>
+          <div class="store-price">$49<span> /month</span></div>
+          <ul class="store-features">
+            <li>Supports Binance &amp; KuCoin via API</li>
+            <li>Fully customizable grid width &amp; levels</li>
+            <li>24/7 unattended operation</li>
+            <li>Real-time P&amp;L dashboard</li>
+          </ul>
+          <button class="store-btn" onclick="openStoreModal('AutoGrid Trading Bot','Automated grid trading for Binance &amp; KuCoin','49')">Buy Now</button>
+        </div>
+        <div class="store-card">
+          <div class="store-card-icon store-icon-whale">&#128011;</div>
+          <h3>Whale Alert Scanner</h3>
+          <p class="store-desc">Real-time whale movement alerts. Track large wallet transfers, exchange inflows/outflows, and smart money moves.</p>
+          <div class="store-price">$19<span> /month</span></div>
+          <ul class="store-features">
+            <li>Tracks transfers above configurable thresholds</li>
+            <li>Exchange inflow &amp; outflow monitoring</li>
+            <li>Smart-money wallet labeling</li>
+            <li>Instant push &amp; email notifications</li>
+          </ul>
+          <button class="store-btn" onclick="openStoreModal('Whale Alert Scanner','Real-time whale movement alerts','19')">Buy Now</button>
+        </div>
+        <div class="store-card">
+          <span class="store-tag store-tag--value">Best Value</span>
+          <div class="store-card-icon store-icon-dca">&#128176;</div>
+          <h3>DCA Master Bot</h3>
+          <p class="store-desc">Automated dollar-cost averaging bot. Schedule recurring buys across multiple coins on your favorite exchange.</p>
+          <div class="store-price">$15<span> /month</span></div>
+          <ul class="store-features">
+            <li>Schedule hourly, daily, or weekly buys</li>
+            <li>Supports 50+ coins across major exchanges</li>
+            <li>Automatic limit-order placement</li>
+            <li>Historical performance tracking</li>
+          </ul>
+          <button class="store-btn" onclick="openStoreModal('DCA Master Bot','Automated dollar-cost averaging','15')">Buy Now</button>
+        </div>
+        <div class="store-card">
+          <div class="store-card-icon store-icon-rebalance">&#9878;&#65039;</div>
+          <h3>Portfolio Rebalancer Pro</h3>
+          <p class="store-desc">Automatically rebalance your crypto portfolio based on target allocations. Supports 10+ exchanges.</p>
+          <div class="store-price">$39<span> /month</span></div>
+          <ul class="store-features">
+            <li>Set target allocation percentages per coin</li>
+            <li>Threshold-based or scheduled rebalancing</li>
+            <li>Connected to 10+ exchanges via API</li>
+            <li>Tax-lot tracking &amp; export</li>
+          </ul>
+          <button class="store-btn" onclick="openStoreModal('Portfolio Rebalancer Pro','Automatic portfolio rebalancing','39')">Buy Now</button>
+        </div>
+        <div class="store-card">
+          <div class="store-card-icon store-icon-arb">&#9889;</div>
+          <h3>Arbitrage Finder</h3>
+          <p class="store-desc">Cross-exchange arbitrage opportunity scanner. Get real-time alerts when price differences exceed your threshold.</p>
+          <div class="store-price">$59<span> /month</span></div>
+          <ul class="store-features">
+            <li>Scans 20+ exchanges simultaneously</li>
+            <li>Customizable spread threshold alerts</li>
+            <li>Includes fee &amp; withdrawal cost estimation</li>
+            <li>Historical arbitrage opportunity log</li>
+          </ul>
+          <button class="store-btn" onclick="openStoreModal('Arbitrage Finder','Cross-exchange arbitrage scanner','59')">Buy Now</button>
+        </div>
+      </div>
+      <div class="store-faq">
+        <h3>Frequently Asked Questions</h3>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">How are products delivered after purchase?</div>
+          <div class="faq-a"><p>After your PayPal payment is confirmed you will receive an email within 15 minutes containing your license key, setup instructions, and an invite link to our private Telegram support group.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">What is your refund policy?</div>
+          <div class="faq-a"><p>We offer a 7-day money-back guarantee on all products. If you are not satisfied, contact support within 7 days of purchase for a full refund &mdash; no questions asked.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Do I need to share my exchange password?</div>
+          <div class="faq-a"><p>Never. All bots connect through read/trade-only API keys that you generate on your exchange. We never have access to your funds or withdrawal permissions.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Can I cancel my subscription anytime?</div>
+          <div class="faq-a"><p>Yes. All subscriptions are month-to-month with no long-term commitment. Cancel directly through PayPal or contact our support team and we will handle it immediately.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="store-modal-overlay" id="storeModal">
+      <div class="store-modal">
+        <button class="store-modal-close" onclick="closeStoreModal()">&times;</button>
+        <h4 id="modalProductName"></h4>
+        <p class="modal-product-desc" id="modalProductDesc"></p>
+        <div class="modal-row"><span class="modal-label">Billing cycle</span><span class="modal-value">Monthly</span></div>
+        <div class="modal-row modal-total"><span class="modal-label">Total today</span><span class="modal-value" id="modalProductPrice"></span></div>
+        <div class="store-modal-actions">
+          <button class="btn-cancel" onclick="closeStoreModal()">Cancel</button>
+          <a id="modalPayLink" href="#" class="btn-confirm" target="_blank" rel="noopener">Proceed to PayPal &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <!-- BOTTOM AD -->
@@ -493,6 +677,7 @@ h1,h2,h3,h4,h5{font-family:var(--font-heading);font-weight:700;line-height:1.2}
           <li><a href="#" onclick="switchTab('mining');return false">Mining Calculator</a></li>
           <li><a href="#" onclick="switchTab('exchanges');return false">Exchange Comparison</a></li>
           <li><a href="#" onclick="switchTab('learn');return false">Learn</a></li>
+          <li><a href="#" onclick="switchTab('store');return false">Store</a></li>
           <li><a href="https://davidalleyway-arch.github.io/toolbox-io/" target="_blank" style="color:var(--purple)">ToolBox.io &rarr;</a></li>
         </ul>
       </div>
@@ -916,6 +1101,27 @@ function copyAddr(btn, addr) {
 buildTicker();
 buildTop10();
 startPriceUpdates();
+
+// Store Modal
+function openStoreModal(name, desc, amount) {
+  document.getElementById('modalProductName').textContent = name;
+  document.getElementById('modalProductDesc').textContent = desc;
+  document.getElementById('modalProductPrice').textContent = '$' + amount + '/mo';
+  document.getElementById('modalPayLink').href = 'https://paypal.me/DavidAlleyWay/' + amount;
+  document.getElementById('storeModal').classList.add('active');
+}
+function closeStoreModal() {
+  document.getElementById('storeModal').classList.remove('active');
+}
+document.getElementById('storeModal').addEventListener('click', function(e) {
+  if (e.target === this) closeStoreModal();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeStoreModal();
+});
+function toggleFaq(el) {
+  el.parentElement.classList.toggle('open');
+}
 </script>
 </body>
 </html>
